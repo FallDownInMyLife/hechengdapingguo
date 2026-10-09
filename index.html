@@ -169,6 +169,8 @@
 'use strict';
 
 /* =================== 云端配置 =================== */
+ const SUPABASE_URL = 'https://fyiarwwydmlfgsvqiqzv.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5aWFyd3d5ZG1sZmdzdnFpcXp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MjAxMzQsImV4cCI6MjEwNzA5NjEzNH0.MOQVGhy9-sYXi3uo8KoMDNrcCxJA9p8DBfLQLWhGP7w';
 let supabaseClient = null;
 function loadCloudConfig(){
   const cfg = JSON.parse(localStorage.getItem('watermelon_cloud') || 'null');
