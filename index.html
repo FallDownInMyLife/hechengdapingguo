@@ -169,10 +169,19 @@
 'use strict';
 
 /* =================== 云端配置 =================== */
- const SUPABASE_URL = 'https://fyiarwwydmlfgsvqiqzv.supabase.co';
+const SUPABASE_URL = 'https://fyiarwwydmlfgsvqiqzv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5aWFyd3d5ZG1sZmdzdnFpcXp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MjAxMzQsImV4cCI6MjEwNzA5NjEzNH0.MOQVGhy9-sYXi3uo8KoMDNrcCxJA9p8DBfLQLWhGP7w';
+
 let supabaseClient = null;
 function loadCloudConfig(){
+  // ★ 优先用代码里写死的配置
+  if (SUPABASE_URL && SUPABASE_KEY){
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      return true;
+    } catch(e){ supabaseClient = null; }
+  }
+  // 回退到 localStorage（用户自己填的）
   const cfg = JSON.parse(localStorage.getItem('watermelon_cloud') || 'null');
   if (cfg && cfg.url && cfg.key){
     try {
@@ -446,8 +455,8 @@ function checkGameOver(dt){
     const b = balls[i];
     if (!b.dropped) continue;
     if (b.y - b.r < DANGER_Y){
-  over = true; break;
-}
+      over = true; break;
+    }
   }
   if (over){
     overTimer += dt;
@@ -459,7 +468,7 @@ function checkGameOver(dt){
         setTimeout(openUploadModal, 350);
       } else if (score > 0 && !supabaseClient){
         setTimeout(() => {
-          if (confirm('你得了 ' + score + ' 分！\n\n还没配置云端服务，无法上传分数。\n现在去配置吗？（也可长按左上角分数区域打开配置）')){
+          if (confirm('你得了 ' + score + ' 分！\n\n还没配置云端服务，无法上传分数。\n现在去配置吗？')){
             openConfigModal();
           }
         }, 350);
