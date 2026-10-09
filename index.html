@@ -672,10 +672,22 @@ canvas.addEventListener('pointerdown', e => {
 }, {passive:false});
 canvas.addEventListener('pointerup', e => {
   e.preventDefault();
-  if (gameOver) return;
   const cx = toCanvasX(e.clientX), cy = toCanvasY(e.clientY);
-  const bx = W - 110, by = 22, bw = 90, bh = 40;
-  if (cx > bx && cx < bx+bw && cy > by && cy < by+bh) return;
+
+  // 游戏结束 → 判断是不是点了「再来一局」按钮
+  if (gameOver){
+    if (pendingScore !== null) return;   // 上传弹窗还开着，不处理
+    const bw = 220, bh = 64, bx = W/2 - bw/2, by = H/2 + 90;
+    if (cx > bx && cx < bx+bw && cy > by && cy < by+bh){
+      restart();
+    }
+    return;
+  }
+
+  // 排行榜按钮
+  const lbx = W - 110, lby = 22, lbw = 90, lbh = 40;
+  if (cx > lbx && cx < lbx+lbw && cy > lby && cy < lby+lbh) return;
+
   drop();
 }, {passive:false});
 
