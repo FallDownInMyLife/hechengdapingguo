@@ -230,6 +230,7 @@ let aimX = W/2;
 let currentLevel = randLevel();
 let dropCd = 0, overTimer = 0, shakeT = 0, time = 0;
 let pendingScore = null;
+let uploadTimer = null;
 
 /* =================== 工具 =================== */
 const clamp = (v,a,b) => v < a ? a : v > b ? b : v;
@@ -465,7 +466,11 @@ function checkGameOver(dt){
       if (score > best){ best = score; localStorage.setItem('watermelon_best', String(best)); }
       if (score > 0 && supabaseClient){
         pendingScore = score;
-        setTimeout(openUploadModal, 350);
+        if (uploadTimer) clearTimeout(uploadTimer);
+        uploadTimer = setTimeout(() => {
+          uploadTimer = null;
+          if (pendingScore !== null) openUploadModal();
+        }, 350);
       } else if (score > 0 && !supabaseClient){
         setTimeout(() => {
           if (confirm('你得了 ' + score + ' 分！\n\n还没配置云端服务，无法上传分数。\n现在去配置吗？')){
@@ -483,6 +488,7 @@ function restart(){
   score = 0; gameOver = false; overTimer = 0; dropCd = 0; shakeT = 0;
   aimX = W/2; currentLevel = randLevel(); clampAim();
   pendingScore = null;
+  if (uploadTimer) { clearTimeout(uploadTimer); uploadTimer = null; }
   document.getElementById('uploadModal').classList.remove('show');
 }
 
