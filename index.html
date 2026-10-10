@@ -711,6 +711,10 @@ function openUploadModal(){
   document.getElementById('uploadName').value = localStorage.getItem('watermelon_name') || '';
   document.getElementById('uploadPassword').value = localStorage.getItem('watermelon_upload_pw') || '';
   document.getElementById('uploadError').textContent = '';
+  // ★ 重置按钮状态（防止上次卡住）
+  const btn = document.getElementById('uploadSubmit');
+  btn.disabled = false;
+  btn.textContent = '上传';
   document.getElementById('uploadModal').classList.add('show');
   setTimeout(() => document.getElementById('uploadName').focus(), 100);
 }
